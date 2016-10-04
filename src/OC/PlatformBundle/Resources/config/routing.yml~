@@ -1,0 +1,9 @@
+oc_platform_homepage:
+    path:     /
+    defaults: { _controller: OCPlatformBundle:Default:index }
+
+
+<meta charset="utf-8"/>
+hello_the_world:
+    path:    /hello-world
+    defaults: { _controller: OCPlatformBundle:Advert:index }

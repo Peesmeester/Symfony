@@ -75,8 +75,8 @@ class AdvertController extends Controller
     // Je pars du principe que $text contient le texte d'un message quelconque
     $text = '...';
     if ($antispam->isSpam($text)) {
-      throw new \Exception('Votre message a été détecté comme spam !');
-      
+      throw new \Exception('Votre message a été détecté comme spam !');}
+
     // La gestion d'un formulaire est particulière, mais l'idée est la suivante :
 
     // Si la requête est en POST, c'est que le visiteur a soumis le formulaire

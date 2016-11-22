@@ -69,6 +69,33 @@ class AdvertController extends Controller
 
   public function addAction(Request $request)
   {
+    // Création de l'entité Advert
+    $advert = new Advert();
+    $advert->setTitle('Recherche développeur Symfony.');
+    $advert->setAuthor('Alexandre');
+    $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
+
+    // Création de l'entité Image
+    $image = new Image();
+    $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+    $image->setAlt('Job de rêve');
+
+    // On lie l'image à l'annonce
+    $advert->setImage($image);
+
+    // On récupère l'EntityManager
+    $em = $this->getDoctrine()->getManager();
+
+    // Étape 1 : On « persiste » l'entité
+    $em->persist($advert);
+
+    // Étape 1 bis : si on n'avait pas défini le cascade={"persist"},
+    // on devrait persister à la main l'entité $image
+    // $em->persist($image);
+
+    // Étape 2 : On déclenche l'enregistrement
+    $em->flush();
+
      // On récupère le service
     $antispam = $this->container->get('oc_platform.antispam');
 
@@ -142,4 +169,24 @@ class AdvertController extends Controller
       'listAdverts' => $listAdverts
     ));
   }
+
+  public function editImageAction($advertId)
+{
+  $em = $this->getDoctrine()->getManager();
+
+  // On récupère l'annonce
+  $advert = $em->getRepository('OCPlatformBundle:Advert')->find($advertId);
+
+  // On modifie l'URL de l'image par exemple
+  $advert->getImage()->setUrl('test.png');
+
+  // On n'a pas besoin de persister l'annonce ni l'image.
+  // Rappelez-vous, ces entités sont automatiquement persistées car
+  // on les a récupérées depuis Doctrine lui-même
+  
+  // On déclenche la modification
+  $em->flush();
+
+  return new Response('OK');
+}
 }
